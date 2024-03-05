@@ -1,6 +1,6 @@
 name: build and push image (developer)
 on:
-  repository_batch:
+  repository_dispatch:
     types: [my-event]
 
 jobs:
