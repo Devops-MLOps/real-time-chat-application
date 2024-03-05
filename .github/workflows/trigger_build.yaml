@@ -24,8 +24,6 @@ jobs:
           file: ./client/Dockerfile
           push : true
           tags: aksrao1998/chat-app-fe:${{ steps.timestamp.outputs.timestamp }}
-          cache-from: type=gha
-          cache-to: type=gha, mode=max
   build-backend:
     runs-on: ubuntu-latest
     steps:
@@ -46,7 +44,5 @@ jobs:
           file: ./server/Dockerfile
           push : true
           tags: aksrao1998/chat-app-be:${{ steps.timestamp.outputs.timestamp }}
-          cache-from: type=gha
-          cache-to: type=gha, mode=max
 
          
