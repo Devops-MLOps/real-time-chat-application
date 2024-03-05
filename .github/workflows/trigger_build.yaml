@@ -1,7 +1,7 @@
 name: build and push image (developer)
 on:
   repository_batch:
-    types: [infra-event]
+    types: [my-event]
 
 jobs:
   build-frontend:
