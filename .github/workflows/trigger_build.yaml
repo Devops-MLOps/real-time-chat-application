@@ -49,8 +49,8 @@ jobs:
         with:
          token: ${{ secrets.TOKEN_TO_TRIGGER }}
          repository: Devops-MLOps/chat-app-helm-chart
-         event-type: pull
-         client_payload: {
+         event-type: my-pull
+         client_payload: '{
           "passed": false,
           "tag": ${{steps.timestamp.outputs.timestamp}}
-         }
+         }'
