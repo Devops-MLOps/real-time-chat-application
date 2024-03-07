@@ -44,5 +44,13 @@ jobs:
           file: ./server/Dockerfile
           push : true
           tags: aksrao1998/chat-app-be:${{ steps.timestamp.outputs.timestamp }}
-
-         
+      - name: trigger helm repo for pull
+        uses: peter-evans/repository-dispatch@v1
+        with:
+         token: ${{ secrets.TOKEN_TO_TRIGGER }}
+         repository: Devops-MLOps/chat-app-helm-chart
+         event-type: pull
+         client_payload: {
+          "passed": false,
+          "tag": ${{steps.timestamp.outputs.timestamp}}
+         }
