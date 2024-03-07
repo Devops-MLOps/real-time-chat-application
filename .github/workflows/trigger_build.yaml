@@ -24,6 +24,8 @@ jobs:
           file: ./client/Dockerfile
           push : true
           tags: aksrao1998/chat-app-fe:${{ steps.timestamp.outputs.timestamp }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
       - name:  build and push the frontend image 
         uses: docker/build-push-action@v5
         with:
@@ -31,13 +33,12 @@ jobs:
           file: ./server/Dockerfile
           push : true
           tags: aksrao1998/chat-app-be:${{ steps.timestamp.outputs.timestamp }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
       - name: trigger helm repo for pull
         uses: peter-evans/repository-dispatch@v1
         with:
          token: ${{ secrets.TOKEN_TO_TRIGGER }}
          repository: Devops-MLOps/chat-app-helm-chart
          event-type: my-pull
-         client_payload: {
-          "passed": false,
-          "tag": "${{steps.timestamp.outputs.timestamp}}"
-         }
+         client_payload: '{"passed": false, "tag": "${{ steps.timestamp.outputs.timestamp }}"}'
