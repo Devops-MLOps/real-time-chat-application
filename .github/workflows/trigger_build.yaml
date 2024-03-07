@@ -35,8 +35,6 @@ jobs:
           tags: aksrao1998/chat-app-be:${{ steps.timestamp.outputs.timestamp }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-      - name: Print timestamp value
-        run: echo "Timestamp value: ${{ steps.timestamp.outputs.timestamp }}"
       - name: trigger helm repo for pull
         uses: peter-evans/repository-dispatch@v1
         with:
