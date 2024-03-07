@@ -39,5 +39,5 @@ jobs:
          event-type: my-pull
          client_payload: {
           "passed": false,
-          "tag": ${{steps.timestamp.outputs.timestamp}}
+          "tag": "${{steps.timestamp.outputs.timestamp}}"
          }
