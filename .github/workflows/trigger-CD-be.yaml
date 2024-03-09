@@ -1,7 +1,7 @@
 name: build and push image (developer)
 on:
   repository_dispatch:
-    types: [my-event]
+    types: [be-event]
 
 jobs:
   build:
@@ -17,13 +17,6 @@ jobs:
       - name: timestamp for tag
         id: timestamp
         run: echo "::set-output name=timestamp::$(date +'%Y%m%d%H%M%S')"
-      - name: build and push the frontend image 
-        uses: docker/build-push-action@v5
-        with:
-          context: ./client
-          file: ./client/Dockerfile
-          push : true
-          tags: aksrao1998/chat-app-fe:${{ steps.timestamp.outputs.timestamp }}
       - name:  build and push the backend image 
         uses: docker/build-push-action@v5
         with:
@@ -31,10 +24,10 @@ jobs:
           file: ./server/Dockerfile
           push : true
           tags: aksrao1998/chat-app-be:${{ steps.timestamp.outputs.timestamp }}
-      - name: trigger helm repo for pull
+      - name: trigger helm repo for deployment
         uses: peter-evans/repository-dispatch@v1
         with:
          token: ${{ secrets.TOKEN_TO_TRIGGER }}
          repository: Devops-MLOps/chat-app-helm-chart
-         event-type: my-pull
+         event-type: be-deploy
          client-payload: '{"passed": false, "tag": "${{ steps.timestamp.outputs.timestamp }}"}'
