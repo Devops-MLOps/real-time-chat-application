@@ -1,8 +1,14 @@
 name: build and push be image (developer)
 on:
-  push:
-    branches: 
-      deploy-be
+  workflow_dispatch:
+    inputs:
+      name:
+        description: environmment
+        type: choice
+        options:
+          - dev
+          - qa
+          - prod
 
 jobs:
   build-backend:

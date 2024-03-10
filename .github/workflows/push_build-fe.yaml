@@ -1,8 +1,14 @@
 name: build and push fe image (developer)
 on:
-  push:
-    branches: 
-      deploy-fe
+  workflow_dispatch:
+    inputs:
+      name:
+        description: environmment
+        type: choice
+        options:
+          - dev
+          - qa
+          - prod
 
 jobs:
   build-frontend:
