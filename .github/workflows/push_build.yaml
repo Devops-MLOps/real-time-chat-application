@@ -1,0 +1,56 @@
+name: build and push image (developer)
+on:
+  workflow_dispatch:
+    inputs:
+      Environment:
+        description: choose an environmment
+        type: choice
+        default: dev
+        options:
+          - dev
+          - qa
+          - prod
+      Application:
+        description: choose an application
+        type: choice
+        default: fe
+        options:
+          - be
+          - fe
+jobs:
+  build-Push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout the repository
+        uses: actions/checkout@v2
+      - name: docker login
+        uses: docker/login-action@v3
+        with:
+          username: ${{secrets.DOCKER_USER}}
+          password: ${{secrets.DOCKER_PASS}}
+      - name: timestamp for tag
+        id: timestamp
+        run: echo "::set-output name=timestamp::$(date +'%Y%m%d%H%M%S')"
+      - name: build and push the frontend image 
+        if: ${{ github.event.inputs.Application == 'fe' }}
+        uses: docker/build-push-action@v5
+        with:
+          context: ./client
+          file: ./client/Dockerfile
+          push : true
+          tags: aksrao1998/chat-app-${{ github.event.inputs.Application }}-${{ github.event.inputs.Environment }}:${{ steps.timestamp.outputs.timestamp }}
+      - name:  build and push the backend image 
+        if: ${{ github.event.inputs.Application == 'be' }}
+        uses: docker/build-push-action@v5
+        with:
+          context: ./server
+          file: ./server/Dockerfile
+          push : true
+          tags: aksrao1998/chat-app-${{ github.event.inputs.Application }}-${{ github.event.inputs.Environment }}:${{ steps.timestamp.outputs.timestamp }}
+      - name: trigger helm repo for deployment
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.TOKEN_TO_TRIGGER }}
+          repository: Devops-MLOps/chat-app-helm-chart
+          event-type: app-deploy
+          client-payload: '{"passed": false, "tag": "${{ steps.timestamp.outputs.timestamp }}", "appName":"chat-app-${{github.event.inputs.Application}}","env": "${{ github.event.inputs.Environment }}"}'
