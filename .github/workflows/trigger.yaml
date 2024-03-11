@@ -26,6 +26,7 @@ jobs:
           push : true
           tags: aksrao1998/chat-app-${{ github.event.client_payload.app }}-${{ github.event.client_payload.env }}:${{ steps.timestamp.outputs.timestamp }}
       - name:  build and push the backend image 
+        if: ${{ github.event.client_payload.app == 'be' }}
         uses: docker/build-push-action@v5
         with:
           context: ./server
