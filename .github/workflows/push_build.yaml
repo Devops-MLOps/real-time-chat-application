@@ -53,4 +53,4 @@ jobs:
           token: ${{ secrets.TOKEN_TO_TRIGGER }}
           repository: Devops-MLOps/chat-app-helm-chart
           event-type: app-deploy
-          client-payload: '{"passed": false, "tag": "${{ steps.timestamp.outputs.timestamp }}", "appName":"chat-app-${{github.event.inputs.Application}}","env": "${{ github.event.inputs.Environment }}"}'
+          client-payload: '{"passed": true, "tag": "${{ steps.timestamp.outputs.timestamp }}", "appName":"chat-app-${{github.event.inputs.Application}}","env": "${{ github.event.inputs.Environment }}"}'
